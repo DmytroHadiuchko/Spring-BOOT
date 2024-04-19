@@ -1,10 +1,13 @@
 package dmytro.hadiuchko.springboot.service;
 
-import dmytro.hadiuchko.springboot.entity.Book;
+import dmytro.hadiuchko.springboot.dto.request.CreateBookRequestDto;
+import dmytro.hadiuchko.springboot.dto.response.BookDto;
 import java.util.List;
 
 public interface BookService {
-    Book save(Book book);
+    BookDto save(CreateBookRequestDto requestDto);
 
-    List findAll();
+    List<BookDto> findAll();
+
+    BookDto findById(Long id);
 }
