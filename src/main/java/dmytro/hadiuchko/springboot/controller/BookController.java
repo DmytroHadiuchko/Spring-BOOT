@@ -1,5 +1,6 @@
 package dmytro.hadiuchko.springboot.controller;
 
+import dmytro.hadiuchko.springboot.dto.request.BookSearchParametersDto;
 import dmytro.hadiuchko.springboot.dto.request.CreateBookRequestDto;
 import dmytro.hadiuchko.springboot.dto.response.BookDto;
 import dmytro.hadiuchko.springboot.service.BookService;
@@ -41,6 +42,11 @@ public class BookController {
     public void updateById(@PathVariable Long id,
                            @RequestBody CreateBookRequestDto bookRequestDto) {
         bookService.updateById(id, bookRequestDto);
+    }
+
+    @GetMapping("/search")
+    public List<BookDto> search(BookSearchParametersDto searchParameters) {
+        return bookService.search(searchParameters);
     }
 
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
