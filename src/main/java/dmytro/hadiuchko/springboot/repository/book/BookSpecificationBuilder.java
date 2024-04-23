@@ -11,24 +11,33 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
+    private static final String AUTHOR_KEY = "author";
+    private static final String TITLE_KEY = "title";
+    private static final String ISBN_KEY = "isbn";
 
     private final SpecificationProviderManager<Book> bookSpecificationProviderManager;
 
     @Override
     public Specification<Book> build(BookSearchParametersDto searchParametersDto) {
         Specification<Book> spec = Specification.where(null);
-        if (searchParametersDto.title() != null && !searchParametersDto.title().isEmpty()) {
-            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("title")
-                    .getSpecification(searchParametersDto.title()));
+        if (isNotNullOrEmpty(searchParametersDto.title())) {
+            spec = buildSpecification(TITLE_KEY, searchParametersDto.title());
         }
-        if (searchParametersDto.author() != null && !searchParametersDto.author().isEmpty()) {
-            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("author")
-                    .getSpecification(searchParametersDto.author()));
+        if (isNotNullOrEmpty(searchParametersDto.author())) {
+            spec = buildSpecification(AUTHOR_KEY, searchParametersDto.author());
         }
-        if (searchParametersDto.isbn() != null && !searchParametersDto.isbn().isEmpty()) {
-            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("isbn")
-                    .getSpecification(searchParametersDto.isbn()));
+        if (isNotNullOrEmpty(searchParametersDto.isbn())) {
+            spec = buildSpecification(ISBN_KEY, searchParametersDto.isbn());
         }
         return spec;
+    }
+
+    private Specification<Book> buildSpecification(String key, String value) {
+        return bookSpecificationProviderManager.getSpecificationProvider(key)
+                .getSpecification(value);
+    }
+
+    private boolean isNotNullOrEmpty(String value) {
+        return value != null && !value.isEmpty();
     }
 }
