@@ -1,14 +1,17 @@
 package dmytro.hadiuchko.springboot.service.impl;
 
+import dmytro.hadiuchko.springboot.dto.request.BookSearchParametersDto;
 import dmytro.hadiuchko.springboot.dto.request.CreateBookRequestDto;
 import dmytro.hadiuchko.springboot.dto.response.BookDto;
 import dmytro.hadiuchko.springboot.entity.Book;
 import dmytro.hadiuchko.springboot.exception.EntityNotFoundException;
 import dmytro.hadiuchko.springboot.mapper.BookMapper;
 import dmytro.hadiuchko.springboot.repository.BookRepository;
+import dmytro.hadiuchko.springboot.repository.book.BookSpecificationBuilder;
 import dmytro.hadiuchko.springboot.service.BookService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final BookSpecificationBuilder specificationBuilder;
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
@@ -49,6 +53,15 @@ public class BookServiceImpl implements BookService {
         book.setDescription(bookRequestDto.getDescription());
         book.setCoverImage(bookRequestDto.getCoverImage());
         bookRepository.save(book);
+    }
+
+    @Override
+    public List<BookDto> search(BookSearchParametersDto searchParameters) {
+        Specification<Book> bookSpecification = specificationBuilder.build(searchParameters);
+        return bookRepository.findAll(bookSpecification)
+                .stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 
     @Override
