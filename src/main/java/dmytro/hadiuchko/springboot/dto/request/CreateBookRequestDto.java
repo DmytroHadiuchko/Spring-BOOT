@@ -16,8 +16,8 @@ public class CreateBookRequestDto {
     @NotBlank
     @Size(min = 13, message = "ISBN must be at least 13-digit numbers long")
     private String isbn;
-    @NotNull
-    @Min(value = 0)
+    @NotNull(message = "price may not be null")
+    @Min(value = 0, message = "min value of price is 0")
     private BigDecimal price;
     private String description;
     private String coverImage;
