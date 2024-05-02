@@ -35,28 +35,28 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "get product by id", description = "return book by id")
+    @Operation(summary = "Get product by id", description = "Return book by id")
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    @Operation(summary = "create a new book", description = "create a new book")
+    @Operation(summary = "Create a new book", description = "Create a new book")
     public BookDto createBook(@Valid @RequestBody CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "update book by id", description = "looking for and update book by id")
+    @Operation(summary = "Update book by id", description = "Looking for and update book by id")
     public void updateById(@PathVariable Long id,
                            @Valid @RequestBody CreateBookRequestDto bookRequestDto) {
         bookService.updateById(id, bookRequestDto);
     }
 
     @GetMapping("/search")
-    @Operation(summary = "search book according to search parameters",
-            description = "filter and returns books according to search parameters")
+    @Operation(summary = "Search book according to search parameters",
+            description = "Filter and returns books according to search parameters")
     public List<BookDto> search(@Valid BookSearchParametersDto searchParameters,
                                     Pageable pageable) {
         return bookService.search(searchParameters, pageable);
@@ -64,7 +64,7 @@ public class BookController {
 
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    @Operation(summary = "delete by id", description = "looking for and remove book by id")
+    @Operation(summary = "Delete by id", description = "Looking for and remove book by id")
     public void deleteBookById(@PathVariable Long id) {
         bookService.deleteById(id);
     }
