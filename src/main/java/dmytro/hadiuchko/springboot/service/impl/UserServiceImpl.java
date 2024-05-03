@@ -22,13 +22,7 @@ public class UserServiceImpl implements UserService {
             throw new RegistrationException("User with email: " + requestDto.getEmail()
                     + " does already exist");
         }
-        User user = new User();
-        user.setEmail(requestDto.getEmail());
-        user.setPassword(requestDto.getPassword());
-        user.setFirstName(requestDto.getFirstName());
-        user.setLastName(requestDto.getLastName());
-        user.setShippingAddress(requestDto.getShippingAddress());
-        User savedUser = repository.save(user);
-        return userMapper.toUserResponse(savedUser);
+        User user = userMapper.toModel(requestDto);
+        return userMapper.toUserResponse(repository.save(user));
     }
 }
