@@ -1,4 +1,4 @@
-package dmytro.hadiuchko.springboot.dto.request;
+package dmytro.hadiuchko.springboot.dto.book.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

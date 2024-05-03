@@ -1,6 +1,6 @@
 package dmytro.hadiuchko.springboot.repository.book;
 
-import dmytro.hadiuchko.springboot.dto.request.BookSearchParametersDto;
+import dmytro.hadiuchko.springboot.dto.book.request.BookSearchParametersDto;
 import dmytro.hadiuchko.springboot.entity.Book;
 import dmytro.hadiuchko.springboot.repository.SpecificationBuilder;
 import dmytro.hadiuchko.springboot.repository.SpecificationProviderManager;

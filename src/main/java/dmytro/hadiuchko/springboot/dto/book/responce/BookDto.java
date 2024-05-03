@@ -1,4 +1,4 @@
-package dmytro.hadiuchko.springboot.dto.response;
+package dmytro.hadiuchko.springboot.dto.book.responce;
 
 import java.math.BigDecimal;
 import lombok.Data;

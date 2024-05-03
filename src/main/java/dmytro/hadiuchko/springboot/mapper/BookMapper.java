@@ -1,8 +1,8 @@
 package dmytro.hadiuchko.springboot.mapper;
 
 import dmytro.hadiuchko.springboot.config.MapperConfig;
-import dmytro.hadiuchko.springboot.dto.request.CreateBookRequestDto;
-import dmytro.hadiuchko.springboot.dto.response.BookDto;
+import dmytro.hadiuchko.springboot.dto.book.request.CreateBookRequestDto;
+import dmytro.hadiuchko.springboot.dto.book.responce.BookDto;
 import dmytro.hadiuchko.springboot.entity.Book;
 import org.mapstruct.Mapper;
 
