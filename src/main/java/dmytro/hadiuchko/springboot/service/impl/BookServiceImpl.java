@@ -1,8 +1,8 @@
 package dmytro.hadiuchko.springboot.service.impl;
 
-import dmytro.hadiuchko.springboot.dto.request.BookSearchParametersDto;
-import dmytro.hadiuchko.springboot.dto.request.CreateBookRequestDto;
-import dmytro.hadiuchko.springboot.dto.response.BookDto;
+import dmytro.hadiuchko.springboot.dto.book.request.BookSearchParametersDto;
+import dmytro.hadiuchko.springboot.dto.book.request.CreateBookRequestDto;
+import dmytro.hadiuchko.springboot.dto.book.responce.BookDto;
 import dmytro.hadiuchko.springboot.entity.Book;
 import dmytro.hadiuchko.springboot.exception.EntityNotFoundException;
 import dmytro.hadiuchko.springboot.mapper.BookMapper;

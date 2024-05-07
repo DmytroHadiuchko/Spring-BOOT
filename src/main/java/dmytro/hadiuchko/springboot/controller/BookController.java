@@ -1,8 +1,8 @@
 package dmytro.hadiuchko.springboot.controller;
 
-import dmytro.hadiuchko.springboot.dto.request.BookSearchParametersDto;
-import dmytro.hadiuchko.springboot.dto.request.CreateBookRequestDto;
-import dmytro.hadiuchko.springboot.dto.response.BookDto;
+import dmytro.hadiuchko.springboot.dto.book.request.BookSearchParametersDto;
+import dmytro.hadiuchko.springboot.dto.book.request.CreateBookRequestDto;
+import dmytro.hadiuchko.springboot.dto.book.responce.BookDto;
 import dmytro.hadiuchko.springboot.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Book management", description = "Endpoints for managing books")
 @RestController
-@RequestMapping(value = "/books")
+@RequestMapping(value = "/api/books")
 @RequiredArgsConstructor
 public class BookController {
     private final BookService bookService;
