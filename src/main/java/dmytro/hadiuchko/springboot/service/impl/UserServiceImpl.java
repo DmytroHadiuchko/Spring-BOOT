@@ -3,11 +3,14 @@ package dmytro.hadiuchko.springboot.service.impl;
 import dmytro.hadiuchko.springboot.dto.user.request.UserRegistrationRequestDto;
 import dmytro.hadiuchko.springboot.dto.user.response.UserResponseDto;
 import dmytro.hadiuchko.springboot.entity.User;
+import dmytro.hadiuchko.springboot.enums.RoleName;
 import dmytro.hadiuchko.springboot.exception.RegistrationException;
 import dmytro.hadiuchko.springboot.mapper.UserMapper;
+import dmytro.hadiuchko.springboot.repository.RoleRepository;
 import dmytro.hadiuchko.springboot.repository.UserRepository;
 import dmytro.hadiuchko.springboot.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +18,8 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto requestDto) {
@@ -23,6 +28,8 @@ public class UserServiceImpl implements UserService {
                     + " does already exist");
         }
         User user = userMapper.toModel(requestDto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(roleRepository.findAllByName(RoleName.ROLE_USER));
         return userMapper.toUserResponse(repository.save(user));
     }
 }

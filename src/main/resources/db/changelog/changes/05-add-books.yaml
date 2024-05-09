@@ -1,0 +1,77 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-books
+      author: Hadiuchko.Dmytro
+      changes:
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "To Kill a Mockingbird" }
+              - column: { name: author, value: "Harper Lee" }
+              - column: { name: isbn, value: "9780061120084" }
+              - column: { name: price, value: "10.99" }
+              - column: { name: description, value: "A gripping, heart-wrenching, and wholly remarkable tale of coming-of-age in a South poisoned by virulent prejudice." }
+              - column: { name: cover_image, value: "tokillamockingbird.jpg" }
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "1984" }
+              - column: { name: author, value: "George Orwell" }
+              - column: { name: isbn, value: "9780451524935" }
+              - column: { name: price, value: "9.99" }
+              - column: { name: description, value: "A dystopian novel by George Orwell." }
+              - column: { name: cover_image, value: "1984.jpg" }
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "The Great Gatsby" }
+              - column: { name: author, value: "F. Scott Fitzgerald" }
+              - column: { name: isbn, value: "9780743273565" }
+              - column: { name: price, value: "12.99" }
+              - column: { name: description, value: "F. Scott Fitzgerald's third book stands as the supreme achievement of his career." }
+              - column: { name: cover_image, value: "greatgatsby.jpg" }
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "Pride and Prejudice" }
+              - column: { name: author, value: "Jane Austen" }
+              - column: { name: isbn, value: "9780141439518" }
+              - column: { name: price, value: "11.99" }
+              - column: { name: description, value: "Jane Austen's best-loved novel is an unforgettable story about the inaccuracy of first impressions, the power of reason, and above all the strange dynamics of human relationships and emotions." }
+              - column: { name: cover_image, value: "prideandprejudice.jpg" }
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "Animal Farm" }
+              - column: { name: author, value: "George Orwell" }
+              - column: { name: isbn, value: "9780451526342" }
+              - column: { name: price, value: "8.99" }
+              - column: { name: description, value: "A political satire by George Orwell, which explores the dangers of totalitarianism." }
+              - column: { name: cover_image, value: "animalfarm.jpg" }
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "The Catcher in the Rye" }
+              - column: { name: author, value: "J.D. Salinger" }
+              - column: { name: isbn, value: "9780316769488" }
+              - column: { name: price, value: "10.50" }
+              - column: { name: description, value: "A controversial novel by J.D. Salinger, portraying a few days in the life of a teenager." }
+              - column: { name: cover_image, value: "catcherintherye.jpg" }
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "Lord of the Flies" }
+              - column: { name: author, value: "William Golding" }
+              - column: { name: isbn, value: "9780399501487" }
+              - column: { name: price, value: "9.49" }
+              - column: { name: description, value: "A classic novel by William Golding, depicting the struggles of a group of boys stranded on an uninhabited island." }
+              - column: { name: cover_image, value: "lordoftheflies.jpg" }
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "Brave New World" }
+              - column: { name: author, value: "Aldous Huxley" }
+              - column: { name: isbn, value: "9780060850524" }
+              - column: { name: price, value: "11.25" }
+              - column: { name: description, value: "A dystopian novel by Aldous Huxley, exploring the consequences of genetic engineering and societal conditioning." }
+              - column: { name: cover_image, value: "bravenewworld.jpg" }
