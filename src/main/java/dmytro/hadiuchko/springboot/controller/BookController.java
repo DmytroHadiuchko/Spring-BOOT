@@ -11,6 +11,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,18 +29,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookController {
     private final BookService bookService;
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping
     @Operation(summary = "Get all products", description = "Get list with sorted products")
     public List<BookDto> getAll(Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}")
     @Operation(summary = "Get product by id", description = "Return book by id")
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.findById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     @Operation(summary = "Create a new book", description = "Create a new book")
@@ -47,6 +51,7 @@ public class BookController {
         return bookService.save(bookDto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update book by id", description = "Looking for and update book by id")
     public void updateById(@PathVariable Long id,
@@ -54,6 +59,7 @@ public class BookController {
         bookService.updateById(id, bookRequestDto);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/search")
     @Operation(summary = "Search book according to search parameters",
             description = "Filter and returns books according to search parameters")
@@ -62,6 +68,7 @@ public class BookController {
         return bookService.search(searchParameters, pageable);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete by id", description = "Looking for and remove book by id")

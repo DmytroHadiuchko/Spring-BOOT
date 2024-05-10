@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-users
+      author: Hadiuchko.Dmytro
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: admin@gmail.com
+              - column:
+                  name: password
+                  value: $2a$10$zn5IeWA4tqnzy2v6ZhrmM.SR2P1VG2v7Ys4N9Wo92Wz97mQ51f/F6
+              - column:
+                  name: first_name
+                  value: admin
+              - column:
+                  name: last_name
+                  value: admin
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: user@gmail.com
+              - column:
+                  name: password
+                  value: $2a$10$ipKcNauPjfiwMnKLw0Q23OxYY3wLf2gAZsi3TOaDqkA9VKjK8wUbW
+              - column:
+                  name: first_name
+                  value: user
+              - column:
+                  name: last_name
+                  value: user

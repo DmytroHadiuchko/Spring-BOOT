@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-is_deleted-column-to-user
+      author: Hadiuchko.Dmytro
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: is_deleted
+                  type: boolean
+                  defaultValue: false
+                  constraints:
+                    nullable: false

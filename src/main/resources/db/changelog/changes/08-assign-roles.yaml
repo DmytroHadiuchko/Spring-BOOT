@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: assign-roles
+      author: Hadiuchko.Dmytro
+      changes:
+        - sql:
+            sql: INSERT INTO users_roles (role_id, user_id) VALUES ((SELECT id FROM roles WHERE name = 'ROLE_ADMIN'), (SELECT id FROM users WHERE email = 'admin@gmail.com'))
+        - sql:
+            sql: INSERT INTO users_roles (role_id, user_id) VALUES ((SELECT id FROM roles WHERE name = 'ROLE_USER'), (SELECT id FROM users WHERE email = 'user@gmail.com'))
