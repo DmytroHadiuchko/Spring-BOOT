@@ -3,6 +3,7 @@ package dmytro.hadiuchko.springboot.service.impl;
 import dmytro.hadiuchko.springboot.dto.book.request.BookSearchParametersDto;
 import dmytro.hadiuchko.springboot.dto.book.request.CreateBookRequestDto;
 import dmytro.hadiuchko.springboot.dto.book.responce.BookDto;
+import dmytro.hadiuchko.springboot.dto.book.responce.BookDtoWithoutCategoryIds;
 import dmytro.hadiuchko.springboot.entity.Book;
 import dmytro.hadiuchko.springboot.exception.EntityNotFoundException;
 import dmytro.hadiuchko.springboot.mapper.BookMapper;
@@ -62,6 +63,14 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll(bookSpecification, pageable)
                 .stream()
                 .map(bookMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<BookDtoWithoutCategoryIds> getBooksByCategoryIds(Long categoriesId) {
+        return bookRepository.findAllByCategoriesId(categoriesId)
+                .stream()
+                .map(bookMapper::toDtoWithoutCategories)
                 .toList();
     }
 
