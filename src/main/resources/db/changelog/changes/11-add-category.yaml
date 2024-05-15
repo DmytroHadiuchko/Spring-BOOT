@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-category
+      author: Hadiuchko.Dmytro
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: "Fiction"
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: "Scientific"

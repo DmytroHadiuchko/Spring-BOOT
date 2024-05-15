@@ -17,3 +17,13 @@ databaseChangeLog:
       file: db/changelog/changes/08-assign-roles.yaml
   - include:
       file: db/changelog/changes/09-add-is_deleted-column-to-user.yaml
+  - include:
+      file: db/changelog/changes/10-create-books_categories-table.yaml
+  - include:
+      file: db/changelog/changes/12-create-category-table.yaml
+  - include:
+      file: db/changelog/changes/11-add-category.yaml
+  - include:
+      file: db/changelog/changes/13-insert-values-to-book_category.yaml
+  - include:
+      file: db/changelog/changes/14-add-is_deleted-column-to-categories.yaml
