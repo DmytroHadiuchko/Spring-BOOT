@@ -25,3 +25,5 @@ databaseChangeLog:
       file: db/changelog/changes/11-add-category.yaml
   - include:
       file: db/changelog/changes/13-insert-values-to-book_category.yaml
+  - include:
+      file: db/changelog/changes/14-added-is_deleted-column-to-categories.yaml

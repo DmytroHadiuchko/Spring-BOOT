@@ -14,6 +14,7 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
     private static final String AUTHOR_KEY = "author";
     private static final String TITLE_KEY = "title";
     private static final String ISBN_KEY = "isbn";
+    private static final String CATEGORY = "category";
 
     private final SpecificationProviderManager<Book> bookSpecificationProviderManager;
 
@@ -28,6 +29,9 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
         }
         if (isNotNullOrEmpty(searchParametersDto.isbn())) {
             spec = buildSpecification(ISBN_KEY, searchParametersDto.isbn());
+        }
+        if (isNotNullOrEmpty(searchParametersDto.isbn())) {
+            spec = buildSpecification(CATEGORY, searchParametersDto.isbn());
         }
         return spec;
     }
