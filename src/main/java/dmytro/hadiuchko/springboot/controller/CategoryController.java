@@ -6,6 +6,7 @@ import dmytro.hadiuchko.springboot.dto.category.responce.CategoryResponseDto;
 import dmytro.hadiuchko.springboot.service.BookService;
 import dmytro.hadiuchko.springboot.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Category management", description = "Endpoints for managing categories")
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
@@ -38,14 +40,12 @@ public class CategoryController {
         return categoryService.save(categoryRequestDto);
     }
 
-    @PreAuthorize("hasRole('USER')")
     @GetMapping
     @Operation(summary = "Return all category", description = "Returns categories list")
     public List<CategoryResponseDto> getAll(Pageable pageable) {
         return categoryService.findAll(pageable);
     }
 
-    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}")
     @Operation(summary = "Get category by id", description = "Returns category by id")
     public CategoryResponseDto getCategoryById(@PathVariable Long id) {
@@ -67,7 +67,6 @@ public class CategoryController {
         categoryService.deleteById(id);
     }
 
-    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}/books")
     public List<BookDtoWithoutCategoryIds> getBooksByCategoriesId(@PathVariable Long id) {
         return bookService.getBooksByCategoryIds(id);
