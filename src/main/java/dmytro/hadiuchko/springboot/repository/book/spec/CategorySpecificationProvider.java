@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CategorySpecificationProvider implements SpecificationProvider<Category> {
-    private static final String CATEGORY = "category";
+    public static final String CATEGORY = "category";
 
     @Override
     public String getKey() {

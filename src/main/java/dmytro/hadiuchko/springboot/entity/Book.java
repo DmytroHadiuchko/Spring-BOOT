@@ -12,13 +12,15 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
-@Data
+@Getter
+@Setter
 @SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id =?")
 @SQLRestriction(value = "is_deleted=false")
 @Table(name = "books")
