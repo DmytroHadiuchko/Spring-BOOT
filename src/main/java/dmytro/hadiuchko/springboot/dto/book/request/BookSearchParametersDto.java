@@ -9,5 +9,6 @@ public record BookSearchParametersDto(
         @NotBlank(message = "author may not be blank")
         String author,
         @Size(min = 13, message = "ISBN must be at least 13-digit numbers long")
-        String isbn) {
+        String isbn,
+        String category) {
 }
