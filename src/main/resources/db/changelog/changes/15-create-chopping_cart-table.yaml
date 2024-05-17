@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-chopping_cart-table
+      author: Hadiuchko.Dmytro
+      changes:
+        - createTable:
+            tableName: shopping_cart
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    references: users(id)
+                    foreignKeyName: fk_shopping_cart_users_id
+              - column:
+                  name: is_deleted
+                  type: boolean
+                  defaultValue: false
+                  constraints:
+                    nullable: false
