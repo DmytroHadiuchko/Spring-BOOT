@@ -6,8 +6,6 @@ import lombok.Data;
 
 @Data
 public class AddCartItemDto {
-    @NotNull(message = "User ID cannot be null")
-    private Long userId;
     @NotNull(message = "Book ID cannot be null")
     private Long bookId;
     @PositiveOrZero(message = "Quantity must be zero or a positive number")
