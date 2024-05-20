@@ -47,11 +47,11 @@ public class ShoppingCartController {
 
     @Operation(summary = "Update quantity", description = "Update book's quantity in shopping cart")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @PutMapping("/cart-items/{cartItemsId}")
+    @PutMapping("/cart-items/{cartItemId}")
     public CartItemDto updateQuantity(@RequestBody @Valid UpdateCartItemRequestDto updateDto,
                                       @AuthenticationPrincipal User user,
-                                      @PathVariable Long cartItemsId) {
-        return shoppingCartService.updateCartItem(updateDto, user.getId(), cartItemsId);
+                                      @PathVariable Long cartItemId) {
+        return shoppingCartService.updateCartItem(updateDto, user.getId(), cartItemId);
     }
 
     @Operation(summary = "delete", description = "delete from shopping cart")

@@ -1,10 +1,12 @@
 package dmytro.hadiuchko.springboot.dto.cartitem;
 
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
 public class UpdateCartItemRequestDto {
-    @PositiveOrZero(message = "Quantity must be zero or a positive number")
+    @NotNull
+    @Positive(message = "Quantity must be more than 0")
     private int quantity;
 }

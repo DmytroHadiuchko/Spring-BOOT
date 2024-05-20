@@ -5,15 +5,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
+@EqualsAndHashCode
+@ToString
 @Getter
 @Setter
 @Table(name = "cart_item")
@@ -25,8 +29,10 @@ public class CartItem {
     private Long id;
     @ManyToOne
     @EqualsAndHashCode.Exclude
+    @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id", nullable = false)
     private ShoppingCart shoppingCart;
     @ManyToOne
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
     @Column(nullable = false)
     private int quantity;
