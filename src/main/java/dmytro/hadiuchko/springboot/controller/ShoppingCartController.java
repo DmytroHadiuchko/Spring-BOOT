@@ -34,7 +34,7 @@ public class ShoppingCartController {
     @PostMapping
     @Operation(summary = "Add book to shopping cart", description = "Add book to shopping cart")
     public CartItemDto addBookToShoppingCart(
-            @RequestBody @Valid AddCartItemDto addCartItemDto,@AuthenticationPrincipal User user) {
+            @RequestBody @Valid AddCartItemDto addCartItemDto, @AuthenticationPrincipal User user) {
         return shoppingCartService.addToCart(addCartItemDto, user);
     }
 
