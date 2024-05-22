@@ -10,12 +10,10 @@ import dmytro.hadiuchko.springboot.entity.OrderItem;
 import dmytro.hadiuchko.springboot.entity.ShoppingCart;
 import dmytro.hadiuchko.springboot.enums.Status;
 import dmytro.hadiuchko.springboot.exception.EntityNotFoundException;
-import dmytro.hadiuchko.springboot.exception.OrderException;
 import dmytro.hadiuchko.springboot.mapper.OrderItemsMapper;
 import dmytro.hadiuchko.springboot.mapper.OrderMapper;
 import dmytro.hadiuchko.springboot.repository.OrderItemsRepository;
 import dmytro.hadiuchko.springboot.repository.OrderRepository;
-import dmytro.hadiuchko.springboot.repository.ShoppingCartRepository;
 import dmytro.hadiuchko.springboot.service.OrderService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -32,14 +30,13 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final OrderItemsRepository orderItemsRepository;
-    private final ShoppingCartRepository shoppingCartRepository;
     private final OrderItemsMapper orderItemsMapper;
+    private final ShoppingCartServiceImpl shoppingCartService;
 
     @Override
     @Transactional
     public OrderResponseDto createOrder(CreateOrderRequestDto requestDto, Long userId) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Can't find user by id: " + userId));
+        ShoppingCart shoppingCart = shoppingCartService.getShoppingCartForUser(userId);
         Order order = createOrder(shoppingCart, requestDto);
         Order savedOrder = orderRepository.save(order);
         Set<OrderItem> orderItems = createOrderItems(savedOrder, shoppingCart);
@@ -84,14 +81,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderItemResponseDto getOrderItemById(Long orderItemId, Long userId, Long orderId) {
-        Order order = findByIdAndUserId(orderId, userId);
-        OrderItem orderItem = orderItemsRepository.findByIdAndOrderId(orderItemId, orderId)
+        OrderItem orderItem = orderItemsRepository.findByIdAndUserIdAndOrderId(orderItemId, userId, orderId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find order item by id: " + orderItemId));
-        if (!orderItem.getOrder().getId().equals(order.getId())) {
-            throw new OrderException(String.format("We don't have an OrderItem that "
-                    + "matches the provide Id: %s in your Orders", orderItemId));
-        }
         return orderItemsMapper.toDto(orderItem);
     }
 
@@ -104,13 +96,13 @@ public class OrderServiceImpl implements OrderService {
 
     private Set<OrderItem> createOrderItems(Order order, ShoppingCart shoppingCart) {
         Set<OrderItem> orderItems = shoppingCart.getCartItems().stream()
-                .map(item -> setItems(item, order))
+                .map(item -> createOrderItem(item, order))
                 .collect(Collectors.toSet());
         orderItemsRepository.saveAll(orderItems);
         return orderItems;
     }
 
-    private OrderItem setItems(CartItem item, Order order) {
+    private OrderItem createOrderItem(CartItem item, Order order) {
         OrderItem orderItem = new OrderItem();
         orderItem.setOrder(order);
         orderItem.setBook(item.getBook());

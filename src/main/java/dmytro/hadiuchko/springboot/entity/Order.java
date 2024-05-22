@@ -1,6 +1,7 @@
 package dmytro.hadiuchko.springboot.entity;
 
 import dmytro.hadiuchko.springboot.enums.Status;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,7 +40,7 @@ public class Order {
     private LocalDateTime orderDate;
     @Column(nullable = false)
     private String shippingAddress;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<OrderItem> orderItems;
     @Column(nullable = false, name = "is_deleted")
     private boolean isDeleted = false;

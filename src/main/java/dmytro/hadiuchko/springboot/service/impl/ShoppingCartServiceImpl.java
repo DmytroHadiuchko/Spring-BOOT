@@ -89,7 +89,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartRepository.save(shoppingCart);
     }
 
-    private ShoppingCart getShoppingCartForUser(Long userId) {
+    public ShoppingCart getShoppingCartForUser(Long userId) {
         return shoppingCartRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find shopping cart by id:" + userId));

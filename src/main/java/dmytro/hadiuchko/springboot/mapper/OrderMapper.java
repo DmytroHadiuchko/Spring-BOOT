@@ -10,5 +10,6 @@ import org.mapstruct.Mapping;
 public interface OrderMapper {
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "orderItems", source = "order.orderItems")
+    @Mapping(target = "total", source = "price")
     OrderResponseDto toDto(Order order);
 }
