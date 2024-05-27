@@ -97,6 +97,7 @@ class BookControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = {"ADMIN", "USER"})
+    @DisplayName("Return all books with valid role")
     void getAllBooks_withUserRole_ReturnAll() throws Exception {
         List<BookDto> bookDtoList = List.of(new BookDto());
         when(bookService.findAll(any(Pageable.class))).thenReturn(bookDtoList);
@@ -107,6 +108,7 @@ class BookControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = {"ADMIN", "USER"})
+    @DisplayName("Return book by id with valid role")
     void getBookById_withUserRole_ReturnBook() throws Exception {
         BookDto bookDto = new BookDto();
         bookDto.setId(BOOK_ID);
@@ -119,6 +121,7 @@ class BookControllerTest {
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
+    @DisplayName("Delete book by id with valid role")
     void deleteBook_WithAdminRole_Success() throws Exception {
         doNothing().when(bookService).deleteById(BOOK_ID);
         mockMvc.perform(delete(BOOK_BY_ID_URL))
@@ -127,6 +130,7 @@ class BookControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = "USER")
+    @DisplayName("Delete book by id with invalid role")
     void deleteBook_WIthInValidRoleUser_unsuccess() throws Exception {
 
         mockMvc.perform(delete(BOOK_BY_ID_URL))
