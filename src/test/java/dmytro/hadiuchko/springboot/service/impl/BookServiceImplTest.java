@@ -83,6 +83,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Find all books")
     void findAll_validPageable_booksFound() {
         Book book = new Book();
         book.setId(BOOK_ID);
@@ -112,6 +113,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Find book by id")
     void findById_validId_bookFound() {
         Book book = new Book();
         book.setId(BOOK_ID);
@@ -134,6 +136,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Find book with invalid id")
     void findById_invalidId_entityNotFoundExceptionThrown() {
         Long id = 1L;
 
@@ -147,6 +150,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Update book by id")
     void updateById_validIdAndRequestDto_bookUpdated() {
         CreateBookRequestDto requestDto = new CreateBookRequestDto();
         requestDto.setCoverImage(NEW_COVER_IMAGE);
@@ -178,6 +182,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Update book with invalid id")
     void updateById_invalidId_entityNotFoundExceptionThrown() {
         Long id = 1L;
         CreateBookRequestDto requestDto = new CreateBookRequestDto();
@@ -193,6 +198,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Delete book by id")
     void deleteById_validId_bookDeleted() {
         Book book = new Book();
         book.setId(BOOK_ID);
@@ -207,6 +213,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Delete book by invalid id")
     void deleteById_invalidId_entityNotFoundExceptionThrown() {
         Long id = 1L;
 
@@ -221,6 +228,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Return book by category id")
     void getBooksByCategoryIds_ValidCategoryId_BooksFound() {
         Long categoryId = 1L;
         List<Book> bookList = Collections.singletonList(new Book());

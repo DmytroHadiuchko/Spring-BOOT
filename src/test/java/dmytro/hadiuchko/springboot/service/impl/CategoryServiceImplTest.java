@@ -16,6 +16,7 @@ import dmytro.hadiuchko.springboot.repository.CategoryRepository;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -42,6 +43,7 @@ class CategoryServiceImplTest {
     private CategoryServiceImpl categoryService;
 
     @Test
+    @DisplayName("Save a new category")
     void save_validRequestDto_success() {
         CategoryRequestDto requestDto = new CategoryRequestDto(CATEGORY_NAME,
                 CATEGORY_DESCRIPTION);
@@ -61,6 +63,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Find all categories")
     void findAll_validData_success() {
         List<Category> categories = List.of(new Category(), new Category(), new Category());
         Page<Category> categoryPage = new PageImpl<>(categories);
@@ -74,6 +77,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Find category by id")
     void findById_validData_success() {
         CategoryResponseDto responseDto = new CategoryResponseDto();
         responseDto.setId(CATEGORY_ID);
@@ -95,6 +99,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Update category by id")
     void updateById_validData_success() {
         Category category = new Category();
         category.setId(CATEGORY_ID);
@@ -123,6 +128,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Delete category by id")
     void deleteById_validData_success() {
         Category category = new Category();
         category.setId(CATEGORY_ID);

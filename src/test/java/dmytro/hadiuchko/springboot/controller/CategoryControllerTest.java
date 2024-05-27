@@ -17,6 +17,7 @@ import dmytro.hadiuchko.springboot.service.CategoryService;
 import java.util.List;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ class CategoryControllerTest {
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
+    @DisplayName("Create new category")
     void createCategory_validAdminRole_success() throws Exception {
         CategoryRequestDto requestDto = new CategoryRequestDto(CATEGORY_NAME, CATEGORY_DESCRIPTION);
 
@@ -79,6 +81,7 @@ class CategoryControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = {"ADMIN", "USER"})
+    @DisplayName("Return all categories")
     void getAllCategories_withUserRole_ReturnAll() throws Exception {
         List<CategoryResponseDto> categoryList = List.of(new CategoryResponseDto());
         when(categoryService.findAll(any(Pageable.class))).thenReturn(categoryList);
@@ -89,6 +92,7 @@ class CategoryControllerTest {
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
+    @DisplayName("Delete category by id with valid role")
     void deleteCategory_WithAdminRole_Success() throws Exception {
         doNothing().when(categoryService).deleteById(CATEGORY_ID);
         mockMvc.perform(delete(CATEGORY_BY_ID_URL))
@@ -97,6 +101,7 @@ class CategoryControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = "USER")
+    @DisplayName("Delete category by id with invalid role")
     void deleteCategory_WIthInValidRoleUser_Fail() throws Exception {
         mockMvc.perform(delete(CATEGORY_BY_ID_URL))
                 .andExpect(status().isForbidden());
