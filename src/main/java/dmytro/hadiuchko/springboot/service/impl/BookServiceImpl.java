@@ -5,12 +5,16 @@ import dmytro.hadiuchko.springboot.dto.book.request.CreateBookRequestDto;
 import dmytro.hadiuchko.springboot.dto.book.responce.BookDto;
 import dmytro.hadiuchko.springboot.dto.book.responce.BookDtoWithoutCategoryIds;
 import dmytro.hadiuchko.springboot.entity.Book;
+import dmytro.hadiuchko.springboot.entity.Category;
 import dmytro.hadiuchko.springboot.exception.EntityNotFoundException;
 import dmytro.hadiuchko.springboot.mapper.BookMapper;
 import dmytro.hadiuchko.springboot.repository.BookRepository;
+import dmytro.hadiuchko.springboot.repository.CategoryRepository;
 import dmytro.hadiuchko.springboot.repository.book.BookSpecificationBuilder;
 import dmytro.hadiuchko.springboot.service.BookService;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,6 +27,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final BookSpecificationBuilder specificationBuilder;
+    private final CategoryRepository categoryRepository;
 
     @Override
     @Transactional
