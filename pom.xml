@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>dmytro.hadiuchko</groupId>
-    <artifactId>Spring-BOOT</artifactId>
+    <artifactId>Book-shop</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Spring BOOT</name>
     <description>Spring BOOT</description>
