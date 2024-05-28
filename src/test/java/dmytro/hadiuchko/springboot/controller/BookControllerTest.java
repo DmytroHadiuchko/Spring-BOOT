@@ -125,7 +125,7 @@ class BookControllerTest {
     void deleteBook_WithAdminRole_Success() throws Exception {
         doNothing().when(bookService).deleteById(BOOK_ID);
         mockMvc.perform(delete(BOOK_BY_ID_URL))
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isNoContent());
     }
 
     @Test
