@@ -33,7 +33,7 @@ for real-world applications.
 - **Docker Compose**: Used for defining and running multi-container Docker application.
 ### API Documentation:
 - **Swagger/OpenApi**: Tools for generating and visualizing API documentation, making it easier to understand and use the API endpoints.
-### Code Quantity:
+### Code Quality:
 - **Checkstyle**: A development tool to help ensure that Java code adheres a coding standard.
 - **Maven**: A build automation tool used primary for Java projects. It simplifies the build process and dependency management.
 ### Development Environment:
@@ -70,15 +70,6 @@ SPRING_DOCKER_PORT=8080
    ```bash
    docker-compose up --build
    ```
-  - **Using Maven**
-   ```bash
-   mvn spring-boot:run
-   ```
-7. **Run the Docker compose**
-```bash
-docker-compose up
-```
-
 ## Features and Functionality
 ## Demo video
 [📹 Watch video](https://www.loom.com/share/2e6af377787e40c98345b227dbaba7c2?sid=8e6ac58f-8de2-4e0c-b83d-f6133f6fc444)
@@ -100,25 +91,14 @@ docker-compose up
   **Sample User Credentials**
   - User Role Credentials:
         
-    `Email:` 
-     ```bash 
-    user@gmail.com
-     ```
-    `Password:`
-     ```bash
-    user
-     ```
-
+    Email: `user@gmail.com`
+    
+    Password: `user`
   - Admin Role Credentials:
-
-    `Email:`
-     ```bash
-     admin@gmail.com
-     ```
-    `Password:`
-     ```bash
-     admin
-     ```
+  
+    Email: `admin@gmail.com`
+    
+    Password: `admin`
 ### Books
 - **User endpoints**
     - **List all books**: Retrieves a list of all available books in the bookstore.
