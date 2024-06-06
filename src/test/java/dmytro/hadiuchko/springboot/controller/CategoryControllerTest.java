@@ -1,30 +1,29 @@
 package dmytro.hadiuchko.springboot.controller;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dmytro.hadiuchko.springboot.dto.category.request.CategoryRequestDto;
 import dmytro.hadiuchko.springboot.dto.category.responce.CategoryResponseDto;
-import dmytro.hadiuchko.springboot.service.CategoryService;
-import java.util.List;
+import dmytro.hadiuchko.springboot.entity.Category;
+import dmytro.hadiuchko.springboot.repository.CategoryRepository;
+import java.util.Optional;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -37,13 +36,14 @@ class CategoryControllerTest {
     private static final Long CATEGORY_ID = 1L;
     private static final String CATEGORY_URL = "/api/categories";
     private static final String CATEGORY_BY_ID_URL = "/api/categories/1";
+    private static final String A_CATEGORY_FOR_FICTIONAL_BOOKS = "A category for fictional books.";
 
     private static MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
-    @Mock
-    private CategoryService categoryService;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @BeforeAll
     static void beforeAll(@Autowired WebApplicationContext webApplicationContext) {
@@ -80,23 +80,32 @@ class CategoryControllerTest {
     }
 
     @Test
+    @Sql(scripts = "classpath:sql/scripts/insert-into-categories.sql",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "classpath:sql/scripts/drop-tables.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @WithMockUser(username = "user", roles = {"ADMIN", "USER"})
     @DisplayName("Return all categories")
     void getAllCategories_withUserRole_ReturnAll() throws Exception {
-        List<CategoryResponseDto> categoryList = List.of(new CategoryResponseDto());
-        when(categoryService.findAll(any(Pageable.class))).thenReturn(categoryList);
-
         mockMvc.perform(get(CATEGORY_URL))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(5))
+                .andExpect(jsonPath("$[0].name").value(CATEGORY_NAME))
+                .andExpect(jsonPath("$[0].description").value(A_CATEGORY_FOR_FICTIONAL_BOOKS));
     }
 
     @Test
+    @Sql(scripts = "classpath:sql/scripts/insert-into-categories.sql",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "classpath:sql/scripts/drop-tables.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @WithMockUser(username = "admin", roles = "ADMIN")
     @DisplayName("Delete category by id with valid role")
     void deleteCategory_WithAdminRole_Success() throws Exception {
-        doNothing().when(categoryService).deleteById(CATEGORY_ID);
-        mockMvc.perform(delete(CATEGORY_BY_ID_URL))
-                .andExpect(status().is2xxSuccessful());
+        mockMvc.perform(delete(CATEGORY_BY_ID_URL, CATEGORY_ID))
+                .andExpect(status().isNoContent());
+        Optional<Category> category = categoryRepository.findById(CATEGORY_ID);
+        assertTrue(category.isEmpty());
     }
 
     @Test
