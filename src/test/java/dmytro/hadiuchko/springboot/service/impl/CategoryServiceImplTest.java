@@ -16,6 +16,7 @@ import dmytro.hadiuchko.springboot.repository.CategoryRepository;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,10 +32,10 @@ class CategoryServiceImplTest {
     private static final String CATEGORY_DESCRIPTION = "interesting book";
     private static final String CATEGORY_NAME = "Fiction";
     private static final String ANOTHER_CATEGORY_DESCRIPTION = "another description";
-    private static final String UPDATED_NAME = "Updated name";
-    private static final String UPDATED_DESCRIPTION = "Updated description";
     private static final Long CATEGORY_ID = 1L;
     private static final Long SECOND_CATEGORY_ID = 2L;
+    private CategoryRequestDto requestDto;
+
     @Mock
     private CategoryMapper categoryMapper;
     @Mock
@@ -42,11 +43,14 @@ class CategoryServiceImplTest {
     @InjectMocks
     private CategoryServiceImpl categoryService;
 
+    @BeforeEach
+    void setUp() {
+        requestDto = new CategoryRequestDto(CATEGORY_NAME, CATEGORY_DESCRIPTION);
+    }
+
     @Test
     @DisplayName("Save a new category")
     void save_validRequestDto_success() {
-        CategoryRequestDto requestDto = new CategoryRequestDto(CATEGORY_NAME,
-                CATEGORY_DESCRIPTION);
         CategoryResponseDto responseDto = new CategoryResponseDto();
         responseDto.setId(CATEGORY_ID);
         responseDto.setName(requestDto.name());
@@ -101,12 +105,6 @@ class CategoryServiceImplTest {
     @Test
     @DisplayName("Update category by id")
     void updateById_validData_success() {
-        Category category = new Category();
-        category.setId(CATEGORY_ID);
-        category.setDescription(CATEGORY_DESCRIPTION);
-        category.setName(CATEGORY_NAME);
-
-        CategoryRequestDto requestDto = new CategoryRequestDto(UPDATED_NAME, UPDATED_DESCRIPTION);
 
         Category updatedCategory = new Category();
         updatedCategory.setId(CATEGORY_ID);
@@ -117,6 +115,7 @@ class CategoryServiceImplTest {
         responseDto.setId(CATEGORY_ID);
         responseDto.setDescription(requestDto.description());
         responseDto.setName(requestDto.name());
+        Category category = initializeCategory();
 
         when(categoryRepository.findById(CATEGORY_ID)).thenReturn(Optional.of(category));
         when(categoryRepository.save(any(Category.class))).thenReturn(updatedCategory);
@@ -130,15 +129,20 @@ class CategoryServiceImplTest {
     @Test
     @DisplayName("Delete category by id")
     void deleteById_validData_success() {
-        Category category = new Category();
-        category.setId(CATEGORY_ID);
-        category.setName(CATEGORY_NAME);
-        category.setDescription(CATEGORY_DESCRIPTION);
+        Category category = initializeCategory();
         categoryRepository.save(category);
 
         when(categoryRepository.findById(CATEGORY_ID)).thenReturn(Optional.of(category));
 
         categoryService.deleteById(CATEGORY_ID);
         verify(categoryRepository, times(1)).delete(category);
+    }
+
+    private Category initializeCategory() {
+        Category category = new Category();
+        category.setId(CATEGORY_ID);
+        category.setName(CATEGORY_NAME);
+        category.setDescription(CATEGORY_DESCRIPTION);
+        return category;
     }
 }

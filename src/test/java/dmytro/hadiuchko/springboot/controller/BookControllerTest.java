@@ -58,6 +58,7 @@ class BookControllerTest {
     private static MockMvc mockMvc;
 
     private CreateBookRequestDto requestDto;
+    private BookDto expected;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -83,13 +84,8 @@ class BookControllerTest {
         requestDto.setIsbn(NEW_ISBN);
         requestDto.setCoverImage(NEW_COVER_IMAGE);
         requestDto.setDescription(NEW_DESCRIPTION);
-    }
 
-    @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
-    @DisplayName("create a new book")
-    void createBook_ValidRequestDto_Success() throws Exception {
-        BookDto expected = new BookDto();
+        expected = new BookDto();
         expected.setId(BOOK_ID);
         expected.setTitle(requestDto.getTitle());
         expected.setAuthor(requestDto.getAuthor());
@@ -97,7 +93,12 @@ class BookControllerTest {
         expected.setIsbn(requestDto.getIsbn());
         expected.setDescription(requestDto.getDescription());
         expected.setCoverImage(requestDto.getCoverImage());
+    }
 
+    @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @DisplayName("create a new book")
+    void createBook_ValidRequestDto_Success() throws Exception {
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
         String result = mockMvc.perform(post(BOOK_URL)

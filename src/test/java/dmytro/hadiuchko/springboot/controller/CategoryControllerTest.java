@@ -1,12 +1,12 @@
 package dmytro.hadiuchko.springboot.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +17,7 @@ import dmytro.hadiuchko.springboot.repository.CategoryRepository;
 import java.util.Optional;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,8 @@ class CategoryControllerTest {
     private static final String A_CATEGORY_FOR_FICTIONAL_BOOKS = "A category for fictional books.";
 
     private static MockMvc mockMvc;
+    private CategoryRequestDto requestDto;
+    private CategoryResponseDto expected;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -52,17 +55,20 @@ class CategoryControllerTest {
                 .build();
     }
 
+    @BeforeEach
+    void setUp() {
+        requestDto = new CategoryRequestDto(CATEGORY_NAME, CATEGORY_DESCRIPTION);
+
+        expected = new CategoryResponseDto();
+        expected.setId(CATEGORY_ID);
+        expected.setName(requestDto.name());
+        expected.setDescription(requestDto.description());
+    }
+
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
     @DisplayName("Create new category")
     void createCategory_validAdminRole_success() throws Exception {
-        CategoryRequestDto requestDto = new CategoryRequestDto(CATEGORY_NAME, CATEGORY_DESCRIPTION);
-
-        CategoryResponseDto expected = new CategoryResponseDto();
-        expected.setId(CATEGORY_ID);
-        expected.setName(requestDto.name());
-        expected.setDescription(requestDto.description());
-
         String jsonRequest = objectMapper.writeValueAsString(expected);
 
         MvcResult result = mockMvc.perform(post(CATEGORY_URL)
@@ -87,11 +93,16 @@ class CategoryControllerTest {
     @WithMockUser(username = "user", roles = {"ADMIN", "USER"})
     @DisplayName("Return all categories")
     void getAllCategories_withUserRole_ReturnAll() throws Exception {
-        mockMvc.perform(get(CATEGORY_URL))
+        String result = mockMvc.perform(get(CATEGORY_URL))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(5))
-                .andExpect(jsonPath("$[0].name").value(CATEGORY_NAME))
-                .andExpect(jsonPath("$[0].description").value(A_CATEGORY_FOR_FICTIONAL_BOOKS));
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        Category[] categories = objectMapper.readValue(result, Category[].class);
+
+        assertEquals(5, categories.length);
+        assertEquals(CATEGORY_NAME, categories[0].getName());
+        assertEquals(A_CATEGORY_FOR_FICTIONAL_BOOKS, categories[0].getDescription());
     }
 
     @Test

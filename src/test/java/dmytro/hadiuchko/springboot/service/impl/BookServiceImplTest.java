@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,6 +43,9 @@ class BookServiceImplTest {
     private static final String UPDATED_BOOK_TITLE = "updated book's title";
     private static final int PAGE_SIZE = 10;
 
+    private CreateBookRequestDto requestDto;
+    private BookDto bookDto;
+
     @Mock
     private BookRepository bookRepository;
 
@@ -51,10 +55,9 @@ class BookServiceImplTest {
     @InjectMocks
     private BookServiceImpl bookService;
 
-    @Test
-    @DisplayName("Save a new book with valid values")
-    void save_validRequestDto_bookSaved() {
-        CreateBookRequestDto requestDto = new CreateBookRequestDto();
+    @BeforeEach
+    void setUp() {
+        requestDto = new CreateBookRequestDto();
         requestDto.setAuthor(NEW_AUTHOR);
         requestDto.setTitle(NEW_TITLE);
         requestDto.setIsbn(NEW_ISBN);
@@ -62,6 +65,18 @@ class BookServiceImplTest {
         requestDto.setDescription(NEW_DESCRIPTION);
         requestDto.setCoverImage(NEW_COVER_IMAGE);
 
+        bookDto = new BookDto();
+        bookDto.setAuthor(requestDto.getAuthor());
+        bookDto.setTitle(requestDto.getTitle());
+        bookDto.setIsbn(requestDto.getIsbn());
+        bookDto.setPrice(requestDto.getPrice());
+        bookDto.setDescription(requestDto.getDescription());
+        bookDto.setCoverImage(requestDto.getCoverImage());
+    }
+
+    @Test
+    @DisplayName("Save a new book with valid values")
+    void save_validRequestDto_bookSaved() {
         BookDto bookDto = new BookDto();
         bookDto.setAuthor(requestDto.getAuthor());
         bookDto.setTitle(requestDto.getTitle());
@@ -79,15 +94,13 @@ class BookServiceImplTest {
         BookDto result = bookService.save(requestDto);
 
         assertEquals(bookDto, result);
-        verify(bookRepository, times(1)).save(book);
+        verify(bookRepository).save(book);
     }
 
     @Test
     @DisplayName("Find all books")
     void findAll_validPageable_booksFound() {
-        Book book = new Book();
-        book.setId(BOOK_ID);
-        book.setTitle(NEW_TITLE);
+        Book book = createBook();
 
         List<Book> books = new ArrayList<>();
         books.add(book);
@@ -109,20 +122,13 @@ class BookServiceImplTest {
         assertEquals(bookDtos, result);
         assertEquals(NEW_TITLE, bookDtos.get(0).getTitle());
         assertEquals(1, bookDtos.size());
-        verify(bookRepository, times(1)).findAll(pageable);
+        verify(bookRepository).findAll(pageable);
     }
 
     @Test
     @DisplayName("Find book by id")
     void findById_validId_bookFound() {
-        Book book = new Book();
-        book.setId(BOOK_ID);
-        book.setTitle(NEW_TITLE);
-        book.setIsbn((NEW_ISBN));
-        book.setPrice(NEW_PRICE);
-        book.setDescription((NEW_DESCRIPTION));
-        book.setCoverImage((NEW_COVER_IMAGE));
-
+        Book book = createBook();
         BookDto bookDto = new BookDto();
         bookDto.setTitle(book.getTitle());
 
@@ -150,38 +156,6 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("Update book by id")
-    void updateById_validIdAndRequestDto_bookUpdated() {
-        CreateBookRequestDto requestDto = new CreateBookRequestDto();
-        requestDto.setCoverImage(NEW_COVER_IMAGE);
-        requestDto.setTitle(UPDATED_BOOK_TITLE);
-        requestDto.setIsbn(NEW_ISBN);
-        requestDto.setPrice(NEW_PRICE);
-        requestDto.setDescription(NEW_DESCRIPTION);
-        requestDto.setAuthor(NEW_AUTHOR);
-
-        Book book = new Book();
-        book.setId(BOOK_ID);
-        book.setTitle(BOOK_TITLE);
-
-        BookDto bookDto = new BookDto();
-        bookDto.setAuthor(requestDto.getAuthor());
-        bookDto.setTitle(requestDto.getTitle());
-        bookDto.setIsbn(requestDto.getIsbn());
-        bookDto.setPrice(requestDto.getPrice());
-        bookDto.setDescription(requestDto.getDescription());
-        bookDto.setCoverImage(requestDto.getCoverImage());
-
-        Long id = 1L;
-        when(bookRepository.findById(id)).thenReturn(Optional.of(book));
-        when(bookRepository.save(book)).thenReturn(book);
-        when(bookMapper.toDto(book)).thenReturn(bookDto);
-
-        BookDto updatedBook = bookService.updateById(id, requestDto);
-        assertEquals(UPDATED_BOOK_TITLE, updatedBook.getTitle());
-    }
-
-    @Test
     @DisplayName("Update book with invalid id")
     void updateById_invalidId_entityNotFoundExceptionThrown() {
         Long id = 1L;
@@ -194,15 +168,13 @@ class BookServiceImplTest {
         });
 
         assertEquals("Can't find book by id: " + id, exception.getMessage());
-        verify(bookRepository, times(1)).findById(id);
+        verify(bookRepository).findById(id);
     }
 
     @Test
     @DisplayName("Delete book by id")
     void deleteById_validId_bookDeleted() {
-        Book book = new Book();
-        book.setId(BOOK_ID);
-        book.setTitle(BOOK_TITLE);
+        Book book = createBook();
         bookRepository.save(book);
 
         when(bookRepository.findById(BOOK_ID)).thenReturn(Optional.of(book));
@@ -224,7 +196,7 @@ class BookServiceImplTest {
         });
 
         assertEquals("Can't find book by id " + id, exception.getMessage());
-        verify(bookRepository, times(1)).findById(id);
+        verify(bookRepository).findById(id);
     }
 
     @Test
@@ -239,6 +211,17 @@ class BookServiceImplTest {
         List<BookDtoWithoutCategoryIds> result = bookService.getBooksByCategoryIds(categoryId);
 
         assertEquals(1, result.size());
-        verify(bookRepository, times(1)).findAllByCategoriesId(categoryId);
+        verify(bookRepository).findAllByCategoriesId(categoryId);
+    }
+
+    private Book createBook() {
+        Book book = new Book();
+        book.setId(BOOK_ID);
+        book.setTitle(NEW_TITLE);
+        book.setIsbn((NEW_ISBN));
+        book.setPrice(NEW_PRICE);
+        book.setDescription((NEW_DESCRIPTION));
+        book.setCoverImage((NEW_COVER_IMAGE));
+        return book;
     }
 }

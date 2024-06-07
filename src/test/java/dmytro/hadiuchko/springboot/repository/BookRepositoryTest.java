@@ -1,12 +1,14 @@
 package dmytro.hadiuchko.springboot.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import dmytro.hadiuchko.springboot.entity.Book;
 import dmytro.hadiuchko.springboot.entity.Category;
 import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +68,7 @@ class BookRepositoryTest {
 
         List<Book> books = bookRepository.findAllByCategoriesId(category.getId());
 
-        Assertions.assertEquals(2, books.size());
-        Assertions.assertTrue(books.stream().allMatch(b -> b.getCategories().contains(category)));
+        assertEquals(2, books.size());
+        assertTrue(books.stream().allMatch(b -> b.getCategories().contains(category)));
     }
 }
