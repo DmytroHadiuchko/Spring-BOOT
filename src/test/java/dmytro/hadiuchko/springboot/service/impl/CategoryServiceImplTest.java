@@ -1,10 +1,8 @@
 package dmytro.hadiuchko.springboot.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -51,10 +49,7 @@ class CategoryServiceImplTest {
     @Test
     @DisplayName("Save a new category")
     void save_validRequestDto_success() {
-        CategoryResponseDto responseDto = new CategoryResponseDto();
-        responseDto.setId(CATEGORY_ID);
-        responseDto.setName(requestDto.name());
-        responseDto.setDescription(requestDto.description());
+        CategoryResponseDto responseDto = createResponseDto();
 
         Category category = new Category();
         when(categoryMapper.toModel(requestDto)).thenReturn(category);
@@ -83,13 +78,7 @@ class CategoryServiceImplTest {
     @Test
     @DisplayName("Find category by id")
     void findById_validData_success() {
-        CategoryResponseDto responseDto = new CategoryResponseDto();
-        responseDto.setId(CATEGORY_ID);
-        responseDto.setName(CATEGORY_NAME);
-
-        CategoryResponseDto secondResponse = new CategoryResponseDto();
-        secondResponse.setId(SECOND_CATEGORY_ID);
-        responseDto.setName(ANOTHER_CATEGORY_DESCRIPTION);
+        CategoryResponseDto responseDto = createResponseDto();
 
         Category category = new Category();
         when(categoryRepository.findById(CATEGORY_ID)).thenReturn(Optional.of(category));
@@ -99,7 +88,7 @@ class CategoryServiceImplTest {
 
         assertNotNull(result);
         assertEquals(responseDto.getName(), result.getName());
-        assertNotEquals(secondResponse.getName(), result.getName());
+
     }
 
     @Test
@@ -111,10 +100,7 @@ class CategoryServiceImplTest {
         updatedCategory.setDescription(requestDto.description());
         updatedCategory.setName(requestDto.name());
 
-        CategoryResponseDto responseDto = new CategoryResponseDto();
-        responseDto.setId(CATEGORY_ID);
-        responseDto.setDescription(requestDto.description());
-        responseDto.setName(requestDto.name());
+        CategoryResponseDto responseDto = createResponseDto();
         Category category = initializeCategory();
 
         when(categoryRepository.findById(CATEGORY_ID)).thenReturn(Optional.of(category));
@@ -135,7 +121,7 @@ class CategoryServiceImplTest {
         when(categoryRepository.findById(CATEGORY_ID)).thenReturn(Optional.of(category));
 
         categoryService.deleteById(CATEGORY_ID);
-        verify(categoryRepository, times(1)).delete(category);
+        verify(categoryRepository).delete(category);
     }
 
     private Category initializeCategory() {
@@ -144,5 +130,13 @@ class CategoryServiceImplTest {
         category.setName(CATEGORY_NAME);
         category.setDescription(CATEGORY_DESCRIPTION);
         return category;
+    }
+
+    private CategoryResponseDto createResponseDto() {
+        CategoryResponseDto responseDto = new CategoryResponseDto();
+        responseDto.setId(CATEGORY_ID);
+        responseDto.setName(requestDto.name());
+        responseDto.setDescription(requestDto.description());
+        return responseDto;
     }
 }

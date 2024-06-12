@@ -3,7 +3,6 @@ package dmytro.hadiuchko.springboot.service.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -39,9 +38,8 @@ class BookServiceImplTest {
     private static final String NEW_DESCRIPTION = "interesting description.";
     private static final String NEW_COVER_IMAGE = "tokillamockingbird.jpg";
     private static final Long BOOK_ID = 1L;
-    private static final String BOOK_TITLE = "some title";
-    private static final String UPDATED_BOOK_TITLE = "updated book's title";
     private static final int PAGE_SIZE = 10;
+    private static final int EXPECTED_SIZE = 1;
 
     private CreateBookRequestDto requestDto;
     private BookDto bookDto;
@@ -64,26 +62,12 @@ class BookServiceImplTest {
         requestDto.setPrice(NEW_PRICE);
         requestDto.setDescription(NEW_DESCRIPTION);
         requestDto.setCoverImage(NEW_COVER_IMAGE);
-
-        bookDto = new BookDto();
-        bookDto.setAuthor(requestDto.getAuthor());
-        bookDto.setTitle(requestDto.getTitle());
-        bookDto.setIsbn(requestDto.getIsbn());
-        bookDto.setPrice(requestDto.getPrice());
-        bookDto.setDescription(requestDto.getDescription());
-        bookDto.setCoverImage(requestDto.getCoverImage());
     }
 
     @Test
     @DisplayName("Save a new book with valid values")
     void save_validRequestDto_bookSaved() {
-        BookDto bookDto = new BookDto();
-        bookDto.setAuthor(requestDto.getAuthor());
-        bookDto.setTitle(requestDto.getTitle());
-        bookDto.setIsbn(requestDto.getIsbn());
-        bookDto.setPrice(requestDto.getPrice());
-        bookDto.setDescription(requestDto.getDescription());
-        bookDto.setCoverImage(requestDto.getCoverImage());
+        BookDto bookDto = createBookDto();
 
         Book book = new Book();
 
@@ -105,8 +89,7 @@ class BookServiceImplTest {
         List<Book> books = new ArrayList<>();
         books.add(book);
 
-        BookDto bookDto = new BookDto();
-        bookDto.setTitle(NEW_TITLE);
+        BookDto bookDto = createBookDto();
 
         List<BookDto> bookDtos = new ArrayList<>();
         bookDtos.add(bookDto);
@@ -121,7 +104,7 @@ class BookServiceImplTest {
 
         assertEquals(bookDtos, result);
         assertEquals(NEW_TITLE, bookDtos.get(0).getTitle());
-        assertEquals(1, bookDtos.size());
+        assertEquals(EXPECTED_SIZE, bookDtos.size());
         verify(bookRepository).findAll(pageable);
     }
 
@@ -129,8 +112,7 @@ class BookServiceImplTest {
     @DisplayName("Find book by id")
     void findById_validId_bookFound() {
         Book book = createBook();
-        BookDto bookDto = new BookDto();
-        bookDto.setTitle(book.getTitle());
+        BookDto bookDto = createBookDto();
 
         when(bookRepository.findById(book.getId())).thenReturn(Optional.of(book));
         when(bookMapper.toDto(book)).thenReturn(bookDto);
@@ -181,7 +163,7 @@ class BookServiceImplTest {
 
         bookService.deleteById(BOOK_ID);
 
-        verify(bookRepository, times(1)).delete(book);
+        verify(bookRepository).delete(book);
     }
 
     @Test
@@ -210,7 +192,7 @@ class BookServiceImplTest {
                 .thenReturn(new BookDtoWithoutCategoryIds());
         List<BookDtoWithoutCategoryIds> result = bookService.getBooksByCategoryIds(categoryId);
 
-        assertEquals(1, result.size());
+        assertEquals(EXPECTED_SIZE, result.size());
         verify(bookRepository).findAllByCategoriesId(categoryId);
     }
 
@@ -223,5 +205,16 @@ class BookServiceImplTest {
         book.setDescription((NEW_DESCRIPTION));
         book.setCoverImage((NEW_COVER_IMAGE));
         return book;
+    }
+
+    private BookDto createBookDto() {
+        bookDto = new BookDto();
+        bookDto.setAuthor(requestDto.getAuthor());
+        bookDto.setTitle(requestDto.getTitle());
+        bookDto.setIsbn(requestDto.getIsbn());
+        bookDto.setPrice(requestDto.getPrice());
+        bookDto.setDescription(requestDto.getDescription());
+        bookDto.setCoverImage(requestDto.getCoverImage());
+        return bookDto;
     }
 }
