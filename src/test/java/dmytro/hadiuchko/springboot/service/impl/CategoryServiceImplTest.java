@@ -29,9 +29,7 @@ import org.springframework.data.domain.Pageable;
 class CategoryServiceImplTest {
     private static final String CATEGORY_DESCRIPTION = "interesting book";
     private static final String CATEGORY_NAME = "Fiction";
-    private static final String ANOTHER_CATEGORY_DESCRIPTION = "another description";
     private static final Long CATEGORY_ID = 1L;
-    private static final Long SECOND_CATEGORY_ID = 2L;
     private CategoryRequestDto requestDto;
 
     @Mock
@@ -94,7 +92,6 @@ class CategoryServiceImplTest {
     @Test
     @DisplayName("Update category by id")
     void updateById_validData_success() {
-
         Category updatedCategory = new Category();
         updatedCategory.setId(CATEGORY_ID);
         updatedCategory.setDescription(requestDto.description());
