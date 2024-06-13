@@ -54,9 +54,9 @@ public class BookController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update book by id", description = "Looking for and update book by id")
-    public void updateById(@PathVariable Long id,
+    public BookDto updateById(@PathVariable Long id,
                            @Valid @RequestBody CreateBookRequestDto bookRequestDto) {
-        bookService.updateById(id, bookRequestDto);
+        return bookService.updateById(id, bookRequestDto);
     }
 
     @PreAuthorize("hasAnyRole('USER','ADMIN')")

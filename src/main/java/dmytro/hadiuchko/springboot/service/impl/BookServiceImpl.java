@@ -8,6 +8,7 @@ import dmytro.hadiuchko.springboot.entity.Book;
 import dmytro.hadiuchko.springboot.exception.EntityNotFoundException;
 import dmytro.hadiuchko.springboot.mapper.BookMapper;
 import dmytro.hadiuchko.springboot.repository.BookRepository;
+import dmytro.hadiuchko.springboot.repository.CategoryRepository;
 import dmytro.hadiuchko.springboot.repository.book.BookSpecificationBuilder;
 import dmytro.hadiuchko.springboot.service.BookService;
 import java.util.List;
@@ -23,6 +24,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final BookSpecificationBuilder specificationBuilder;
+    private final CategoryRepository categoryRepository;
 
     @Override
     @Transactional
@@ -48,7 +50,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void updateById(Long id, CreateBookRequestDto bookRequestDto) {
+    public BookDto updateById(Long id, CreateBookRequestDto bookRequestDto) {
         Book book = bookRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find book by id: " + id));
         book.setTitle(bookRequestDto.getTitle());
@@ -57,7 +59,7 @@ public class BookServiceImpl implements BookService {
         book.setPrice(bookRequestDto.getPrice());
         book.setDescription(bookRequestDto.getDescription());
         book.setCoverImage(bookRequestDto.getCoverImage());
-        bookRepository.save(book);
+        return bookMapper.toDto(bookRepository.save(book));
     }
 
     @Override
