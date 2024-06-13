@@ -3,7 +3,6 @@ package dmytro.hadiuchko.springboot.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -149,7 +148,6 @@ class BookControllerTest {
         bookDto.setId(BOOK_ID);
         bookDto.setTitle(BOOK_TITLE);
 
-        when(bookService.findById(BOOK_ID)).thenReturn(bookDto);
         mockMvc.perform(get(BOOK_BY_ID_URL))
                 .andExpect(status().isOk());
     }
